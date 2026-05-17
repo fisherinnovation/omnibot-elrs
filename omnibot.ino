@@ -357,7 +357,16 @@ bool updateArmState(float s, float d, float r, float f) {
 void moveBot() {
   float ws[3];
   getWheelSpeeds(ws);
-  driveWheels(ws, maxSpeed);
+
+  // Scale top speed by how far the sticks are pushed.
+  // Translation magnitude is capped at 1.0 (diagonal full-stick = same top
+  // speed as cardinal full-stick). Rotation uses its own magnitude so spinning
+  // in place is also variable. The max of the two drives the speed limit so
+  // combined moves feel natural without either axis dominating unexpectedly.
+  float transMag = sqrt(vSpeed[0]*vSpeed[0] + vSpeed[1]*vSpeed[1]);
+  float inputMag = min(1.0f, max(transMag, abs(vSpeed[2])));
+
+  driveWheels(ws, maxSpeed * inputMag);
   driveLift();
 }
 
