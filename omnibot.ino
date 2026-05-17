@@ -257,10 +257,10 @@ void handleCrsfFrame() {
   unsigned int channels[16];
   unpackCrsfChannels(crsfFrame + 3, channels);
 
-  float s = crsfToFloat(channels[CH_STRAFE], INV_STRAFE);
-  float d = crsfToFloat(channels[CH_DRIVE],  INV_DRIVE);
-  float r = crsfToFloat(channels[CH_ROTATE], INV_ROTATE);
-  float f = crsfToFloat(channels[CH_FORK],   INV_FORK);
+  float s = crsfToFloat(channels[CH_STRAFE], INV_STRAFE, CRSF_DEADBAND);
+  float d = crsfToFloat(channels[CH_DRIVE],  INV_DRIVE,  CRSF_DEADBAND);
+  float r = crsfToFloat(channels[CH_ROTATE], INV_ROTATE, CRSF_DEADBAND);
+  float f = crsfToFloat(channels[CH_FORK],   INV_FORK,   FORK_DEADBAND);
 
   lastCrsfFrameMs = millis();
 
@@ -320,7 +320,7 @@ void unpackCrsfChannels(byte *payload, unsigned int *channels) {
 // The mapping is split at CRSF_CH_MID rather than the arithmetic centre so
 // that small factory calibration offsets on either side don't cause the
 // output to drift from zero when the stick is released.
-float crsfToFloat(unsigned int raw, bool invert) {
+float crsfToFloat(unsigned int raw, bool invert, int deadband) {
   long val = constrain((long)raw, CRSF_CH_MIN, CRSF_CH_MAX);
   float out;
   if (val < CRSF_CH_MID) {
@@ -328,7 +328,7 @@ float crsfToFloat(unsigned int raw, bool invert) {
   } else {
     out = (float)map(val, CRSF_CH_MID, CRSF_CH_MAX, 0, 1000) / 1000.0f;
   }
-  if (abs(out) * 1000.0f < (float)CRSF_DEADBAND) return 0.0f;
+  if (abs(out) * 1000.0f < (float)deadband) return 0.0f;
   return invert ? -out : out;
 }
 

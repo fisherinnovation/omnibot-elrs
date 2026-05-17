@@ -53,3 +53,8 @@ const bool INV_ROTATE = false;
 // Raise it if the robot creeps when sticks are released.
 // Lower it if the robot feels sluggish to start moving.
 const int CRSF_DEADBAND = 120;
+
+// The throttle stick is non-centering so it rarely rests at exactly zero.
+// A wider dead zone here stops the forklift from creeping when the stick
+// is sitting near but not at the bottom of its travel. 250 ≈ 25% of throw.
+const int FORK_DEADBAND = 250;
