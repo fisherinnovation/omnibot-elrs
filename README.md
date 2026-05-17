@@ -1,5 +1,7 @@
 # Omnibot ELRS
 
+![Omnibot with RadioMaster controller](robot.jpg)
+
 ExpressLRS CRSF radio control for the [Crunchlabs Omnibot](https://www.crunchlabs.com/products/omnibot), replacing the stock binary RF board with a RadioMaster XR1 Nano ELRS receiver and a Radiomaster transmitter.
 
 The stock firmware maps buttons to fixed speed vectors — everything is on or off. This firmware reads analog joystick values over CRSF and feeds them directly into the existing omni-directional kinematic model, giving smooth proportional control over all three degrees of freedom simultaneously.
