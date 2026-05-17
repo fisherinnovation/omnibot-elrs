@@ -10,7 +10,7 @@
 // Maximum PWM duty cycle sent to the drive motors [0–255].
 // 255 = full speed. Start lower (150–200) while tuning direction flags, then
 // increase once everything moves the right way.
-uint8_t maxSpeed = 200;
+uint8_t maxSpeed = 255;
 
 // ── Motor direction ───────────────────────────────────────────────────────────
 // If a drive wheel spins the wrong way, flip its flag here rather than
@@ -58,3 +58,11 @@ const int CRSF_DEADBAND = 120;
 // A wider dead zone here stops the forklift from creeping when the stick
 // is sitting near but not at the bottom of its travel. 250 ≈ 25% of throw.
 const int FORK_DEADBAND = 250;
+
+// ── Speed curve ───────────────────────────────────────────────────────────────
+// Exponent applied to the input magnitude before scaling motor speed.
+// 1.0 = perfectly linear (half stick → half speed).
+// Below 1.0 = more speed at partial deflections (0.7 makes 60% stick feel
+// like ~75% speed) while full stick still reaches full speed.
+// Above 1.0 = slower near centre, snappier at the extremes.
+const float SPEED_CURVE = 0.7f;

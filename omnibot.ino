@@ -366,7 +366,7 @@ void moveBot() {
   float transMag = sqrt(vSpeed[0]*vSpeed[0] + vSpeed[1]*vSpeed[1]);
   float inputMag = min(1.0f, max(transMag, abs(vSpeed[2])));
 
-  driveWheels(ws, maxSpeed * inputMag);
+  driveWheels(ws, maxSpeed * pow(inputMag, SPEED_CURVE));
   driveLift();
 }
 
