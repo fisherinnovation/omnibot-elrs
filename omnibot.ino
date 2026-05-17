@@ -77,6 +77,8 @@
 // ── Pin assignments ───────────────────────────────────────────────────────────
 // Drive motors use DRV8833 or similar DIR+PWM interface.
 // LIFT shares the same interface for the forklift motor.
+#define LED      13
+
 #define M1_DIR   4
 #define M1_PWM   5
 #define M2_DIR   7
@@ -155,6 +157,8 @@ bool          crsfArmed        = false; // true once the neutral-hold check pass
 void setup() {
   Serial.begin(CRSF_BAUD);
 
+  pinMode(LED, OUTPUT);
+
   pinMode(M1_DIR, OUTPUT);   pinMode(M1_PWM, OUTPUT);
   pinMode(M2_DIR, OUTPUT);   pinMode(M2_PWM, OUTPUT);
   pinMode(M3_DIR, OUTPUT);   pinMode(M3_PWM, OUTPUT);
@@ -168,6 +172,21 @@ void loop() {
   getDirection();     // consume any waiting CRSF bytes; update vSpeed on complete frames
   checkCrsfTimeout(); // zero vSpeed if frames stop arriving
   moveBot();          // translate vSpeed into motor PWM
+  updateLed();
+}
+
+void updateLed() {
+  unsigned long now = millis();
+  if (lastCrsfFrameMs == 0) {
+    // No signal — fast blink (200 ms)
+    digitalWrite(LED, (now / 200) % 2);
+  } else if (!crsfArmed) {
+    // Signal but not armed — slow blink (800 ms)
+    digitalWrite(LED, (now / 800) % 2);
+  } else {
+    // Armed — solid on
+    digitalWrite(LED, HIGH);
+  }
 }
 
 

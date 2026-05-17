@@ -41,7 +41,7 @@ const uint8_t CH_ROTATE = 3;  // left stick X  (yaw)
 // ── Axis inversion ────────────────────────────────────────────────────────────
 // If pushing a stick forward makes the robot go backward (or similar), set
 // the corresponding flag to true. Test one axis at a time.
-const bool INV_STRAFE = false;
+const bool INV_STRAFE = true;
 const bool INV_DRIVE  = true;   // stick up → robot forward (CRSF counts up = pull back)
 const bool INV_FORK   = false;
 const bool INV_ROTATE = false;
